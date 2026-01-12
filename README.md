@@ -2,6 +2,8 @@
 
 [![Try In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/theodi/ndl-core-client/blob/main/demo.ipynb)
 
+> **Note:** The backend API is hosted on [Hugging Face Spaces](https://huggingface.co/spaces/theodi/ndl-core-data-api) using the free tier. If you experience connection timeouts, please visit the Space URL first to wake up the service, then retry your request.
+
 A Python library to easily search and download datasets from the NDL Core Corpus.
 
 ## Installation
