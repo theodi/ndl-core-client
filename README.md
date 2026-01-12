@@ -1,5 +1,7 @@
 # NDL Core Client
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/theodi/ndl-core-client/blob/main/demo.ipynb)
+
 A Python library to easily search and download datasets from the NDL Core Corpus.
 
 ## Installation
@@ -23,7 +25,7 @@ from ndl_core_client import NDLCoreClient
 client = NDLCoreClient()
 
 # Search for datasets
-results = client.search("climate change")
+results = client.search("Police use of force")
 
 # Results are returned as a pandas DataFrame
 print(results)
