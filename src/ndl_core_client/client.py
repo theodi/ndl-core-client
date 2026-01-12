@@ -27,6 +27,7 @@ class NDLCoreClient:
             
         Raises:
             requests.exceptions.RequestException: If the API request fails
+            ValueError: If the API response format is unexpected
         """
         url = f"{self.base_url}/search"
         params = {"query": query}
@@ -35,6 +36,13 @@ class NDLCoreClient:
         response.raise_for_status()
         
         data = response.json()
+        
+        # Validate that the response is a list
+        if not isinstance(data, list):
+            raise ValueError(
+                f"Expected API to return a list, got {type(data).__name__}. "
+                f"Response: {data}"
+            )
         
         # Convert the list of JSON objects to a DataFrame
         df = pd.DataFrame(data)
