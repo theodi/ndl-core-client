@@ -1,6 +1,6 @@
 # NDL Core Client
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/theodi/ndl-core-client/blob/main/demo.ipynb)
+[![Try In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/theodi/ndl-core-client/blob/main/demo.ipynb)
 
 A Python library to easily search and download datasets from the NDL Core Corpus.
 
@@ -15,6 +15,8 @@ pip install git+https://github.com/theodi/ndl-core-client.git
 ## Usage
 
 The library provides a simple `NDLCoreClient` class with a `search` function to query the NDL Core Corpus API.
+
+See the notebook for usage details: [![Try In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/theodi/ndl-core-client/blob/main/demo.ipynb)
 
 ### Basic Example
 
