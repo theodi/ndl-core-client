@@ -28,7 +28,7 @@ For programmatic use in your own agents or applications, use the `search_agentic
 from ndl_core_client import search_agentic
 
 # Search with a natural language query
-response = search_agentic("NHS waiting times data", limit=10)
+response = search_agentic("police force usage", limit=10)
 
 # Access structured results
 print(f"Found {response.metadata.total_count} results")
@@ -100,7 +100,7 @@ Add to your Claude Desktop config:
 
 Restart Claude Desktop, then you can ask:
 
-> "Find me UK government datasets about NHS waiting times"
+> "Find me UK government datasets about police force usage"
 
 Claude will automatically use the `search_ndl_corpus` tool to find relevant datasets.
 
@@ -135,44 +135,27 @@ Once configured, you can use Gemini CLI with NDL Core tools:
 gemini
 
 # Or run a single query
-gemini -p "Find UK government datasets about air quality monitoring"
+gemini -p "Find UK government datasets about police force usage"
 ```
 
 Gemini will automatically discover and use the `search_ndl_corpus` tool when relevant to your query.
 
 ### Example Session
 
-```bash
-$ gemini
-> Find datasets about NHS waiting times
+**Initial search query:**
 
-I found several relevant datasets from the NDL Core Corpus:
+![Gemini search results](images/gemini_results.png)
 
-1. **NHS Referral to Treatment Waiting Times** (nhs.uk)
-   - Monthly statistics on waiting times for consultant-led treatment
-   - Download: https://...
+**Follow-up query:**
 
-2. **A&E Waiting Times** (gov.uk)
-   - Emergency department waiting time statistics
-   - Download: https://...
-```
+![Gemini further query](images/gemini_further_query.png)
+
+**Detailed result:**
+
+![Gemini injury result](images/gemini_injury_result.png)
 
 ---
 
 ### Environment Variables
 
 No environment variables are required. The server connects to the default NDL Core API endpoint.
-
----
-
-## Example Interactions
-
-Once configured, you can ask your AI agent natural language questions like:
-
-- "Find UK government datasets about NHS waiting times"
-- "Search for open data on police use of force statistics"  
-- "What datasets are available about renewable energy in the UK?"
-- "Find data about housing prices from the Office for National Statistics"
-- "Search for environmental monitoring data from DEFRA"
-
-The agent will use the `search_ndl_corpus` tool to find relevant datasets and present the results, including titles, descriptions, sources, and download links.
