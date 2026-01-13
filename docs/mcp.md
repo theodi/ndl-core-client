@@ -150,8 +150,7 @@ Once configured, you can use Gemini CLI with NDL Core tools:
 # Start an interactive session
 gemini
 
-# Or run a single query
-gemini -p "Find UK government datasets about police force usage"
+> Find UK government datasets about police force usage
 ```
 
 Gemini will automatically discover and use the `search_ndl_corpus` tool when relevant to your query.
