@@ -6,6 +6,20 @@
 
 A Python library to easily search and download datasets from the NDL Core Corpus.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Using with AI Agents (MCP)](#using-with-ai-agents-mcp)
+- [Development](#development)
+- [API Reference](#api-reference)
+  - [NDLCoreClient](#ndlcoreclient)
+  - [search_agentic](#search_agenticquery-base_url-limit---agentsearchresponse)
+  - [SearchResultMetadata](#searchresultmetadata)
+  - [AgentSearchResponse](#agentsearchresponse)
+  - [Column Descriptions](#column-descriptions)
+- [License](#license)
+
 ## Installation
 
 You can install the library directly from GitHub using pip:
@@ -35,42 +49,35 @@ results = client.search("Police use of force")
 print(results)
 ```
 
-### Agentic Search (for AI Agents & LLMs)
+## Using with AI Agents (MCP)
 
-For use with AI agents and LLMs, use `search_agentic` which returns a structured Pydantic object:
+This library provides a **Model Context Protocol (MCP)** server for seamless integration with AI agents like Claude, Gemini, OpenAI, and others.
 
-```python
-from ndl_core_client import NDLCoreClient
+📖 **[Full MCP Documentation →](docs/mcp.md)**
 
-# Create a client instance
-client = NDLCoreClient()
+### Quick Start
 
-# Search and get structured response
-response = client.search_agentic("Police use of force")
+Install with MCP support:
 
-# Access metadata (total count and column descriptions)
-print(f"Total results: {response.metadata.total_count}")
-print(f"Column descriptions: {response.metadata.column_descriptions}")
-
-# Access search results as list of dictionaries
-for result in response.data:
-    print(f"Title: {result['title']}")
-    print(f"Source: {result['source']}")
-    print(f"Distance: {result['_distance']}")
+```bash
+pip install "ndl-core-client[mcp] @ git+https://github.com/theodi/ndl-core-client.git"
 ```
 
-### Custom API URL
+Configure your AI agent (e.g., Claude Desktop):
 
-If you need to use a different API endpoint:
+```json
+{
+  "mcpServers": {
+    "ndl-core": {
+      "command": "ndl-core-mcp"
+    }
+  }
+}
+```
 
-```python
-from ndl_core_client import NDLCoreClient
+Then ask your agent: *"Find UK government datasets related to police use of force"*
 
-# Create a client with a custom base URL
-client = NDLCoreClient(base_url="https://your-custom-api-url.com")
-
-# Search for datasets
-results = client.search("your query")
+See [docs/mcp.md](docs/mcp.md) for detailed setup instructions for Claude, Gemini, OpenAI, and other MCP-compatible clients.
 
 ## Development
 
@@ -114,12 +121,14 @@ Search the NDL Core Corpus.
 **Raises:**
 - `requests.exceptions.RequestException`: If the API request fails.
 
-#### `search_agentic(query: str) -> AgentSearchResponse`
+### `search_agentic(query, base_url, limit) -> AgentSearchResponse`
 
-Search the NDL Core Corpus and return a Pydantic response for agentic use.
+Standalone function for agentic search (located in `ndl_core_client.agent.tools`).
 
 **Parameters:**
-- `query` (str): The search query string.
+- `query` (str): The natural language search query string.
+- `base_url` (str, optional): The base URL of the NDL Core API. Defaults to the public API.
+- `limit` (int, optional): Maximum number of results to return. If None, returns all results.
 
 **Returns:**
 - `AgentSearchResponse`: A Pydantic object containing:

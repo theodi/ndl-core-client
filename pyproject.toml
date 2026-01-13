@@ -13,6 +13,14 @@ dependencies = [
     "pydantic>=2.0.0",
 ]
 
+[project.optional-dependencies]
+mcp = [
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+ndl-core-mcp = "ndl_core_client.agent.mcp_server:main"
+
 [build-system]
 requires = ["uv_build>=0.9.24,<0.10.0"]
 build-backend = "uv_build"
