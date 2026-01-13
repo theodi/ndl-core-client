@@ -2,6 +2,22 @@
 
 This library provides a **Model Context Protocol (MCP)** server for seamless integration with AI agents like Claude, Gemini, OpenAI, and others.
 
+## Table of Contents
+
+- [What is MCP?](#what-is-mcp)
+- [Project Structure](#project-structure)
+- [Direct Usage (Without MCP)](#direct-usage-without-mcp)
+- [Installation](#installation)
+- [Available MCP Tools](#available-mcp-tools)
+  - [Tool: search_ndl_corpus](#tool-search_ndl_corpus)
+  - [Tool: get_corpus_schema](#tool-get_corpus_schema)
+- [Claude Desktop](#claude-desktop)
+- [Gemini CLI](#gemini-cli)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Example Session](#example-session)
+- [Environment Variables](#environment-variables)
+
 ## What is MCP?
 
 The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that enables AI agents to securely connect to external tools and data sources. By providing an MCP server, NDL Core Client can be used directly by AI assistants to search UK government datasets.
