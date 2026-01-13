@@ -106,181 +106,58 @@ Claude will automatically use the `search_ndl_corpus` tool to find relevant data
 
 ---
 
-## Gemini (Google AI Studio / Vertex AI)
+## Gemini CLI
 
-Gemini supports MCP tools through the Google AI SDK. First, ensure the MCP server is installed, then configure your Gemini agent:
+The [Gemini CLI](https://github.com/google-gemini/gemini-cli) supports MCP servers for extending Gemini's capabilities from the command line.
 
-```python
-from google import genai
-from google.genai import types
+### Configuration
 
-# Create MCP tools from the server
-tools = types.Tool(mcp=types.MCPTool(
-    command="ndl-core-mcp"
-))
+Add the NDL Core MCP server to your Gemini CLI settings file:
 
-# Initialize Gemini client
-client = genai.Client()
+**Location:** `~/.gemini/settings.json`
 
-# Create a chat with MCP tools enabled
-chat = client.chats.create(
-    model="gemini-2.0-flash",
-    config=types.GenerateContentConfig(tools=[tools])
-)
-
-# Gemini can now use the NDL Core search tools
-response = chat.send_message("Find UK government data about renewable energy")
-print(response.text)
-```
-
-For Vertex AI, use the `vertexai` package with similar configuration.
-
----
-
-## OpenAI Agents
-
-OpenAI's Agents SDK supports MCP tools for building AI agents that can use external tools.
-
-### Using with OpenAI Agents SDK
-
-```python
-import asyncio
-from openai import agents
-from agents.mcp import MCPServerStdio
-
-async def main():
-    # Create MCP server connection
-    async with MCPServerStdio(
-        command="ndl-core-mcp"
-    ) as mcp_server:
-        # Get tools from the MCP server
-        tools = await mcp_server.list_tools()
-        
-        # Create an agent with MCP tools
-        agent = agents.Agent(
-            name="UK Data Research Agent",
-            instructions="You help users find UK government datasets. Use the search_ndl_corpus tool to find relevant data.",
-            tools=tools
-        )
-        
-        # Run the agent
-        result = await agents.Runner.run(
-            agent,
-            "Find datasets about air quality monitoring in London"
-        )
-        
-        print(result.final_output)
-
-asyncio.run(main())
-```
-
-### Using with OpenAI Responses API (Direct Tool Calling)
-
-If you prefer direct API access without the Agents SDK, you can use the MCP tools with the Responses API:
-
-```python
-import subprocess
-import json
-from openai import OpenAI
-
-client = OpenAI()
-
-# Define the tools based on MCP schema
-tools = [
-    {
-        "type": "function",
-        "function": {
-            "name": "search_ndl_corpus",
-            "description": "Search the NDL Core Corpus for UK open government datasets. Returns datasets matching the semantic search query.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Natural language search query"
-                    },
-                    "limit": {
-                        "type": "integer",
-                        "description": "Maximum results to return (default: 10)"
-                    }
-                },
-                "required": ["query"]
-            }
-        }
+```json
+{
+  "mcpServers": {
+    "ndl-core": {
+      "command": "ndl-core-mcp"
     }
-]
-
-# Use with chat completions
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[{"role": "user", "content": "Find UK datasets about climate change policies"}],
-    tools=tools
-)
-
-# Handle tool calls by invoking the MCP server
-if response.choices[0].message.tool_calls:
-    tool_call = response.choices[0].message.tool_calls[0]
-    # Process tool call with MCP server...
+  }
+}
 ```
 
-### Using with OpenAI Assistants API
+### Usage
 
-For persistent agents with memory, configure MCP tools in your Assistant:
-
-```python
-from openai import OpenAI
-
-client = OpenAI()
-
-# Create an assistant with NDL Core tools
-assistant = client.beta.assistants.create(
-    name="UK Government Data Researcher",
-    instructions="You help users find and analyze UK government open data. Use the available tools to search the NDL Core Corpus.",
-    model="gpt-4o",
-    tools=[
-        {
-            "type": "function",
-            "function": {
-                "name": "search_ndl_corpus",
-                "description": "Search the NDL Core Corpus for UK open government datasets.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {"type": "string", "description": "Natural language search query"},
-                        "limit": {"type": "integer", "description": "Max results (default: 10)"}
-                    },
-                    "required": ["query"]
-                }
-            }
-        },
-        {
-            "type": "function", 
-            "function": {
-                "name": "get_corpus_schema",
-                "description": "Get field descriptions for NDL Core Corpus search results.",
-                "parameters": {"type": "object", "properties": {}, "required": []}
-            }
-        }
-    ]
-)
-
-print(f"Created assistant: {assistant.id}")
-```
-
----
-
-## Other MCP-Compatible Clients
-
-The NDL Core MCP server works with any MCP-compatible client. The server uses **stdio transport**, meaning it communicates via standard input/output.
-
-### Generic Usage
+Once configured, you can use Gemini CLI with NDL Core tools:
 
 ```bash
-# Run the MCP server directly
-ndl-core-mcp
+# Start an interactive session
+gemini
+
+# Or run a single query
+gemini -p "Find UK government datasets about air quality monitoring"
 ```
 
-The server accepts JSON-RPC messages on stdin and responds on stdout, following the MCP specification.
+Gemini will automatically discover and use the `search_ndl_corpus` tool when relevant to your query.
+
+### Example Session
+
+```bash
+$ gemini
+> Find datasets about NHS waiting times
+
+I found several relevant datasets from the NDL Core Corpus:
+
+1. **NHS Referral to Treatment Waiting Times** (nhs.uk)
+   - Monthly statistics on waiting times for consultant-led treatment
+   - Download: https://...
+
+2. **A&E Waiting Times** (gov.uk)
+   - Emergency department waiting time statistics
+   - Download: https://...
+```
+
+---
 
 ### Environment Variables
 
